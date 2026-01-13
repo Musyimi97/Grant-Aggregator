@@ -39,12 +39,14 @@ export default function AdminPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          // In production, you'd need to add: "x-cron-secret": process.env.NEXT_PUBLIC_CRON_SECRET
         },
         body: JSON.stringify({}),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to run scraping");
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "Failed to run scraping");
       }
 
       // Refetch jobs after a delay

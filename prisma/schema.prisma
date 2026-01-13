@@ -15,17 +15,20 @@ model Grant {
   title       String
   description String   @db.Text
   organization String
-  category    String[] // ["Cloud Compute", "Health AI", "Finance AI", "LLM Tokens"]
+  category    String[] // ["Cloud Compute", "Health AI", "Finance AI", "LLM Tokens", "Technology"]
   amount      String?
   deadline    DateTime?
   url         String   @unique
   requirements String? @db.Text
   eligibility String?  @db.Text
   source      String   // Website source
+  location    String?  // "Africa", "Kenya", "Global", etc.
   scrapedAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   isActive    Boolean  @default(true)
   tags        String[]
+
+  @@index([location])
 
   @@index([deadline])
   @@index([category])
@@ -43,12 +46,4 @@ model ScrapingJob {
 
   @@index([status])
   @@index([startedAt])
-}
-
-model User {
-  id          String   @id @default(cuid())
-  email       String   @unique
-  savedGrants String[] // Grant IDs
-  preferences Json     // Notification preferences, categories of interest
-  createdAt   DateTime @default(now())
 }

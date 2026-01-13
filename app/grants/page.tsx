@@ -21,16 +21,18 @@ interface Grant {
   deadline?: string;
   url: string;
   source: string;
+  location?: string;
   isActive: boolean;
 }
 
 export default function GrantsPage() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
+  const [location, setLocation] = useState("");
   const [page, setPage] = useState(1);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["grants", search, category, page],
+    queryKey: ["grants", search, category, location, page],
     queryFn: async () => {
       const params = new URLSearchParams({
         page: page.toString(),
@@ -38,6 +40,7 @@ export default function GrantsPage() {
       });
       if (search) params.append("search", search);
       if (category) params.append("category", category);
+      if (location) params.append("location", location);
       params.append("isActive", "true");
 
       const response = await fetch(`/api/grants?${params}`);
@@ -76,6 +79,19 @@ export default function GrantsPage() {
             <option value="Health AI">Health AI</option>
             <option value="Finance AI">Finance AI</option>
             <option value="LLM Tokens">LLM Tokens</option>
+            <option value="Technology">Technology</option>
+          </Select>
+          <Select
+            value={location}
+            onChange={(e) => {
+              setLocation(e.target.value);
+              setPage(1);
+            }}
+          >
+            <option value="">All Locations</option>
+            <option value="Kenya">Kenya</option>
+            <option value="Africa">Africa</option>
+            <option value="Global">Global</option>
           </Select>
         </div>
       </div>
@@ -121,6 +137,11 @@ export default function GrantsPage() {
                           {cat}
                         </Badge>
                       ))}
+                      {grant.location && (
+                        <Badge variant="outline">
+                          📍 {grant.location}
+                        </Badge>
+                      )}
                     </div>
                     <div className="flex items-center justify-between text-sm">
                       <div className="flex gap-4">

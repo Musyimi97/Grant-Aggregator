@@ -9,6 +9,7 @@ export interface GrantData {
   requirements?: string;
   eligibility?: string;
   source: string;
+  location?: string; // "Africa", "Kenya", "Global", etc.
   tags?: string[];
 }
 

@@ -48,9 +48,11 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const source = body.source;
 
-    // Verify cron secret if provided
+    // In development, allow without secret. In production, require it.
     const cronSecret = request.headers.get("x-cron-secret");
-    if (process.env.CRON_SECRET && cronSecret !== process.env.CRON_SECRET) {
+    const isDevelopment = process.env.NODE_ENV === "development";
+    
+    if (!isDevelopment && process.env.CRON_SECRET && cronSecret !== process.env.CRON_SECRET) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }

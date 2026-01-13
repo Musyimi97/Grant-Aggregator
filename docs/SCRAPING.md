@@ -2,11 +2,51 @@
 
 ## Overview
 
-The scraping system automatically fetches grant information from various online sources and stores them in the database.
+The scraping system automatically fetches grant information from various online sources and stores them in the database. The system supports both **RSS feeds** (preferred) and **HTML scraping** (fallback).
+
+### RSS Feeds vs HTML Scraping
+
+**RSS Feeds (Preferred):**
+- More reliable and structured
+- Less prone to breaking when websites change
+- Better performance
+- Automatic date parsing
+- Use RSS feeds whenever available
+
+**HTML Scraping (Fallback):**
+- Used when RSS feeds are not available
+- Requires CSS selectors that may break
+- More fragile but necessary for some sources
 
 ## Adding a New Grant Source
 
-### Step 1: Create Scraper Function
+### Step 1: Check for RSS Feed
+
+First, check if the source has an RSS feed:
+
+```typescript
+import { findRSSFeed, parseRSSFeed } from "@/lib/scrapers/rss";
+
+// Try to find RSS feed
+const rssUrl = await findRSSFeed("https://example.com/grants");
+if (rssUrl) {
+  // Use RSS feed
+  const grants = await parseRSSFeed(rssUrl, {
+    source: "Source Name",
+    organization: "Organization Name",
+    category: ["Technology"],
+    location: "Global", // or "Africa", "Kenya"
+    filterFn: (item) => {
+      // Optional: filter items
+      const text = `${item.title} ${item.contentSnippet}`.toLowerCase();
+      return text.includes("technology") || text.includes("africa");
+    },
+  });
+  return grants;
+}
+```
+
+### Step 2: Create Scraper Function (HTML Fallback)
 
 Add a new scraper function in `lib/scrapers/index.ts`:
 
@@ -70,7 +110,8 @@ Each grant must include:
 - **title** (string): Grant title
 - **description** (string): Grant description
 - **organization** (string): Organization offering the grant
-- **category** (string[]): Array of categories (Cloud Compute, Health AI, Finance AI, LLM Tokens)
+- **category** (string[]): Array of categories (Cloud Compute, Health AI, Finance AI, LLM Tokens, Technology)
+- **location** (string, optional): Location filter ("Africa", "Kenya", "Global")
 - **url** (string): Unique URL to the grant
 - **source** (string): Source website name
 
@@ -90,6 +131,48 @@ Optional fields:
 4. **User-Agent**: Set appropriate User-Agent headers
 5. **Timeout**: Set reasonable timeouts for requests
 6. **Data Validation**: Validate scraped data before saving
+
+## Using RSS Feeds
+
+RSS feeds are the preferred method for scraping grants. They provide structured data and are more reliable.
+
+### Basic RSS Feed Usage
+
+```typescript
+import { parseRSSFeed } from "@/lib/scrapers/rss";
+
+export async function scrapeWithRSS(): Promise<GrantData[]> {
+  return await parseRSSFeed("https://example.com/grants/rss.xml", {
+    source: "Source Name",
+    organization: "Organization Name",
+    category: ["Technology"],
+    location: "Africa", // or "Kenya", "Global"
+    filterFn: (item) => {
+      // Optional filter function
+      const text = `${item.title} ${item.contentSnippet}`.toLowerCase();
+      return text.includes("technology");
+    },
+  });
+}
+```
+
+### Finding RSS Feeds
+
+Many websites have RSS feeds. Look for:
+- RSS/XML links in the page source
+- `/feed`, `/rss`, `/atom` URLs
+- Check the website's sitemap
+
+Use the `findRSSFeed()` helper to automatically detect RSS feeds:
+
+```typescript
+import { findRSSFeed } from "@/lib/scrapers/rss";
+
+const rssUrl = await findRSSFeed("https://example.com/grants");
+if (rssUrl) {
+  console.log("Found RSS feed:", rssUrl);
+}
+```
 
 ## Handling Dynamic Content
 

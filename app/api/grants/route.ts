@@ -22,6 +22,7 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const category = searchParams.get("category");
     const search = searchParams.get("search");
+    const location = searchParams.get("location");
     const isActive = searchParams.get("isActive");
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "50");
@@ -33,6 +34,10 @@ export async function GET(request: NextRequest) {
       where.category = {
         has: category,
       };
+    }
+
+    if (location) {
+      where.location = location;
     }
 
     if (search) {
