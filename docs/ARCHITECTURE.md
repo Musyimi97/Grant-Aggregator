@@ -42,10 +42,6 @@ Tracks scraping job execution:
 - Results (grants found, errors)
 - Timestamps (started, completed)
 
-### User Model
-User accounts and preferences:
-- Saved grants (array of grant IDs)
-- Preferences (JSON for notifications, categories)
 
 ## Data Flow
 
@@ -61,8 +57,7 @@ User accounts and preferences:
 1. User browses grants on `/grants` page
 2. Filters and search applied via API
 3. User clicks grant to view details
-4. User can save grants to their account
-5. Saved grants displayed on `/saved` page
+4. User can apply directly via external link
 
 ## API Endpoints
 
@@ -78,10 +73,6 @@ User accounts and preferences:
 - `POST /api/scrape` - Manual trigger
 - `GET /api/scrape/status` - Get scraping job history
 
-### User API
-- `GET /api/user/saved` - Get saved grants
-- `POST /api/user/saved` - Save a grant
-- `DELETE /api/user/saved` - Unsave a grant
 
 ## Scraping Architecture
 
@@ -108,8 +99,6 @@ Each scraper is a function that:
 
 ### Environment Variables
 - `DATABASE_URL`: PostgreSQL connection string
-- `NEXTAUTH_SECRET`: Secret for authentication
-- `NEXTAUTH_URL`: Application URL
 - `CRON_SECRET`: Secret for securing cron endpoints
 
 ## Performance Considerations
@@ -130,7 +119,6 @@ Each scraper is a function that:
 
 ## Future Enhancements
 
-- Authentication with NextAuth.js
 - Email notifications
 - AI-powered grant matching
 - Application tracking

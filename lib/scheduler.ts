@@ -149,12 +149,12 @@ export async function runAllScrapingJobs() {
 
 /**
  * Initialize cron jobs for automatic scraping
- * Runs every 6 hours
+ * Runs twice a day (at midnight and noon)
  */
 export function initializeCronJobs() {
-  // Run every 6 hours
-  cron.schedule("0 */6 * * *", async () => {
-    console.log("Running scheduled scraping job...");
+  // Run at midnight (00:00) and noon (12:00) every day
+  cron.schedule("0 0 * * *", async () => {
+    console.log("Running scheduled scraping job (midnight)...");
     try {
       await runAllScrapingJobs();
       console.log("Scheduled scraping job completed");
@@ -163,5 +163,15 @@ export function initializeCronJobs() {
     }
   });
 
-  console.log("Cron jobs initialized - scraping will run every 6 hours");
+  cron.schedule("0 12 * * *", async () => {
+    console.log("Running scheduled scraping job (noon)...");
+    try {
+      await runAllScrapingJobs();
+      console.log("Scheduled scraping job completed");
+    } catch (error) {
+      console.error("Error in scheduled scraping job:", error);
+    }
+  });
+
+  console.log("Cron jobs initialized - scraping will run twice daily (midnight and noon)");
 }

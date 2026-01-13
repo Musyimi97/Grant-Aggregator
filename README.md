@@ -4,9 +4,8 @@ A web-based grant tracking and aggregation platform that automatically fetches, 
 
 ## Features
 
-- 🔍 **Automated Grant Scraping**: Automatically fetches grants from multiple sources
+- 🔍 **Automated Grant Scraping**: Automatically fetches grants from multiple sources (runs twice daily)
 - 📊 **Categorization**: Organizes grants by Cloud Compute, Health AI, Finance AI, and LLM Tokens
-- 🔖 **Save & Bookmark**: Save grants for later review
 - 🔔 **Deadline Tracking**: Never miss an important deadline
 - 🎯 **Advanced Filtering**: Filter by category, deadline, amount, and more
 - 📱 **Responsive Design**: Works seamlessly on all devices
@@ -49,8 +48,7 @@ cp .env.example .env
 Edit `.env` and add your database URL and other configuration:
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/grant_aggregator?schema=public"
-NEXTAUTH_SECRET="your-secret-key-here"
-NEXTAUTH_URL="http://localhost:3000"
+CRON_SECRET="your-secure-random-string-here"
 ```
 
 4. Set up the database:
@@ -73,7 +71,6 @@ Grant-Aggregator/
 ├── app/                    # Next.js App Router pages
 │   ├── api/               # API routes
 │   ├── grants/            # Grant pages
-│   ├── saved/             # Saved grants page
 │   ├── admin/             # Admin dashboard
 │   └── layout.tsx         # Root layout
 ├── components/            # React components
@@ -101,11 +98,10 @@ Grant-Aggregator/
 
 ## Database Schema
 
-The platform uses three main models:
+The platform uses two main models:
 
 - **Grant**: Stores grant information (title, description, category, deadline, etc.)
 - **ScrapingJob**: Tracks scraping job status and results
-- **User**: User accounts and saved grants
 
 ## API Endpoints
 
@@ -114,11 +110,9 @@ The platform uses three main models:
 - `GET /api/grants/[id]` - Get single grant
 - `PATCH /api/grants/[id]` - Update grant
 - `DELETE /api/grants/[id]` - Remove grant
+- `GET /api/scrape` - Triggered by Vercel Cron (runs twice daily)
 - `POST /api/scrape` - Trigger scraping job manually
 - `GET /api/scrape/status` - Check scraping job status
-- `GET /api/user/saved` - Get user's saved grants
-- `POST /api/user/saved` - Save a grant
-- `DELETE /api/user/saved` - Unsave a grant
 
 ## Deployment
 

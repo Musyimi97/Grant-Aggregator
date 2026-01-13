@@ -55,17 +55,11 @@ In Vercel project settings, add:
 
 ```
 DATABASE_URL=postgresql://...
-NEXTAUTH_SECRET=generate-with-openssl-rand-base64-32
-NEXTAUTH_URL=https://your-domain.vercel.app
 CRON_SECRET=generate-secure-random-string
 ```
 
-Generate secrets:
+Generate CRON_SECRET:
 ```bash
-# NEXTAUTH_SECRET
-openssl rand -base64 32
-
-# CRON_SECRET
 openssl rand -hex 32
 ```
 
@@ -83,7 +77,7 @@ pnpm exec prisma migrate deploy
 
 ## Step 6: Configure Vercel Cron
 
-The `vercel.json` file is already configured for cron jobs. Vercel will automatically set up the cron job to run every 6 hours.
+The `vercel.json` file is already configured for cron jobs. Vercel will automatically set up cron jobs to run twice daily (at midnight and noon).
 
 To verify:
 1. Go to Vercel project settings
@@ -131,13 +125,13 @@ To verify:
 ### Development
 ```env
 DATABASE_URL=postgresql://localhost:5432/grant_aggregator
-NEXTAUTH_URL=http://localhost:3000
+CRON_SECRET=your-secure-random-string
 ```
 
 ### Production
 ```env
 DATABASE_URL=postgresql://... (from Vercel/Supabase)
-NEXTAUTH_URL=https://your-domain.vercel.app
+CRON_SECRET=your-secure-random-string
 ```
 
 ## Scaling Considerations

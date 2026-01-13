@@ -144,9 +144,6 @@ export default function GrantDetailPage() {
                 Apply Now
               </a>
             </Button>
-            <Button variant="outline" size="lg">
-              Save Grant
-            </Button>
           </div>
         </CardContent>
       </Card>

@@ -18,9 +18,6 @@ export default function Home() {
           <Button asChild size="lg">
             <Link href="/grants">Browse Grants</Link>
           </Button>
-          <Button asChild variant="outline" size="lg">
-            <Link href="/saved">Saved Grants</Link>
-          </Button>
         </div>
       </section>
 

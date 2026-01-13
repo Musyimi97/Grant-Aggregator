@@ -12,15 +12,9 @@ export function Header() {
           <Link href="/grants" className="text-sm font-medium hover:underline">
             Grants
           </Link>
-          <Link href="/saved" className="text-sm font-medium hover:underline">
-            Saved
-          </Link>
           <Link href="/admin" className="text-sm font-medium hover:underline">
             Admin
           </Link>
-          <Button variant="outline" size="sm">
-            Sign In
-          </Button>
         </nav>
       </div>
     </header>

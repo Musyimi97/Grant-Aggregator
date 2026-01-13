@@ -20,8 +20,7 @@ Edit `.env` and add your database URL:
 
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/grant_aggregator?schema=public"
-NEXTAUTH_SECRET="your-secret-key-here"
-NEXTAUTH_URL="http://localhost:3000"
+CRON_SECRET="your-secure-random-string-here"
 ```
 
 ### 3. Set Up Database
@@ -109,10 +108,9 @@ pnpm lint            # Run ESLint
 
 ## Next Steps
 
-1. **Add Authentication**: Set up NextAuth.js for user accounts
-2. **Customize Scrapers**: Update scrapers to match actual website structures
-3. **Add More Sources**: Follow `docs/SCRAPING.md` to add new grant sources
-4. **Deploy**: Follow `docs/DEPLOYMENT.md` to deploy to Vercel
+1. **Customize Scrapers**: Update scrapers to match actual website structures
+2. **Add More Sources**: Follow `docs/SCRAPING.md` to add new grant sources
+3. **Deploy**: Follow `docs/DEPLOYMENT.md` to deploy to Vercel
 
 ## Troubleshooting
 
